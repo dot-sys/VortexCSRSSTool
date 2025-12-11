@@ -5,7 +5,8 @@
 <h2 align="center">Vortex CSRSS Tool</h2>
 
 <p align="center">
-  Extract and visualize Windows path strings from CSRSS raw data - fast, private and browser-based.
+  Extract and visualize Windows path strings from CSRSS raw data - fast, private and browser-based. <br>
+  Use here: https://dot-sys.github.io/VortexCSRSSTool/
 </p>
 
 ---
