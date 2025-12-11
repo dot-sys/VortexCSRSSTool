@@ -51,6 +51,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const outputContent = document.getElementById('output');
     const ignoreSystemCheckbox = document.getElementById('ignore-system');
     const countIndicator = document.getElementById('count-indicator');
+    const searchInput = document.getElementById('search-input');
+
+    let currentSearchMatches = [];
+    let currentMatchIndex = -1;
 
     const WIN_PATH_REGEX = /[a-zA-Z]:\\(?:[^\\\/:\*\?<>\|"\r\n]+\\)*[^\\\/:\*\?<>\|"\r\n]+/g;
     const STANDARD_EXTENSIONS = ['exe', 'pyd', 'manifest', 'dll', 'config', 'cpl'];
@@ -200,6 +204,132 @@ document.addEventListener('DOMContentLoaded', function() {
         return processors[selectedOption] ? processors[selectedOption]() : '';
     }
 
+    function getActiveTextarea() {
+        const activeTab = document.querySelector('.tab.active');
+        if (!activeTab) return null;
+        
+        const activeTabName = activeTab.getAttribute('data-tab');
+        const activeContent = document.getElementById(activeTabName);
+        
+        return activeContent ? activeContent.querySelector('.text-input') : null;
+    }
+
+    function getActiveHighlightOverlay() {
+        const activeTab = document.querySelector('.tab.active');
+        if (!activeTab) return null;
+        
+        const activeTabName = activeTab.getAttribute('data-tab');
+        const activeContent = document.getElementById(activeTabName);
+        
+        return activeContent ? activeContent.querySelector('.highlight-overlay') : null;
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function clearSearchHighlights() {
+        const textarea = getActiveTextarea();
+        if (textarea) {
+            const wrapper = textarea.parentElement;
+            const highlightedDiv = wrapper.querySelector('.highlighted-content');
+            if (highlightedDiv) {
+                highlightedDiv.remove();
+            }
+            textarea.style.display = 'block';
+        }
+        currentSearchMatches = [];
+        currentMatchIndex = -1;
+    }
+
+    function performSearch(searchTerm) {
+        const textarea = getActiveTextarea();
+        const overlay = getActiveHighlightOverlay();
+        
+        if (!textarea || !searchTerm) {
+            clearSearchHighlights();
+            return;
+        }
+
+        const text = textarea.value;
+        const searchLower = searchTerm.toLowerCase();
+        const textLower = text.toLowerCase();
+        
+        currentSearchMatches = [];
+        let index = 0;
+        
+        while ((index = textLower.indexOf(searchLower, index)) !== -1) {
+            currentSearchMatches.push(index);
+            index += searchTerm.length;
+        }
+
+        if (currentSearchMatches.length > 0) {
+            currentMatchIndex = (currentMatchIndex + 1) % currentSearchMatches.length;
+            highlightTextInTextarea(textarea, text, searchTerm, currentSearchMatches[currentMatchIndex]);
+            scrollToMatch(textarea, currentSearchMatches[currentMatchIndex]);
+        } else {
+            clearSearchHighlights();
+            currentMatchIndex = -1;
+        }
+    }
+
+    function highlightTextInTextarea(textarea, text, searchTerm, activeMatchIndex) {
+        const wrapper = textarea.parentElement;
+        if (!wrapper) return;
+
+        let highlightedDiv = wrapper.querySelector('.highlighted-content');
+        
+        if (!highlightedDiv) {
+            highlightedDiv = document.createElement('div');
+            highlightedDiv.className = 'text-input highlighted-content';
+            highlightedDiv.style.display = 'block';
+            textarea.style.display = 'none';
+            wrapper.appendChild(highlightedDiv);
+        }
+
+        const searchLower = searchTerm.toLowerCase();
+        const textLower = text.toLowerCase();
+        let result = '';
+        let lastIndex = 0;
+
+        currentSearchMatches.forEach(matchIndex => {
+            result += escapeHtml(text.substring(lastIndex, matchIndex));
+            
+            const matchedText = text.substring(matchIndex, matchIndex + searchTerm.length);
+            const isActive = matchIndex === activeMatchIndex;
+            const highlightClass = isActive ? 'highlight-active' : 'highlight';
+            
+            result += `<mark class="${highlightClass}">${escapeHtml(matchedText)}</mark>`;
+            lastIndex = matchIndex + searchTerm.length;
+        });
+
+        result += escapeHtml(text.substring(lastIndex));
+        highlightedDiv.innerHTML = result;
+        
+        const scrollTop = textarea.scrollTop;
+        highlightedDiv.scrollTop = scrollTop;
+    }
+
+    function scrollToMatch(textarea, matchIndex) {
+        const text = textarea.value;
+        const beforeMatch = text.substring(0, matchIndex);
+        const linesBefore = beforeMatch.split('\n').length - 1;
+        
+        const lineHeight = parseFloat(window.getComputedStyle(textarea).lineHeight) || 21;
+        const scrollPosition = linesBefore * lineHeight - (textarea.clientHeight / 3);
+        
+        const wrapper = textarea.parentElement;
+        const highlightedDiv = wrapper.querySelector('.highlighted-content');
+        
+        if (highlightedDiv) {
+            highlightedDiv.scrollTop = Math.max(0, scrollPosition);
+        } else {
+            textarea.scrollTop = Math.max(0, scrollPosition);
+        }
+    }
+
     tabs.forEach(tab => {
         tab.addEventListener('click', function() {
             switchTab(this.getAttribute('data-tab'));
@@ -219,8 +349,10 @@ document.addEventListener('DOMContentLoaded', function() {
         csrss2Input.value = '';
         indicator1.classList.remove('active');
         indicator2.classList.remove('active');
-        outputContent.innerHTML = '';
+        outputContent.innerHTML = '<div class="textarea-wrapper"><div class="highlight-overlay" id="highlight-output"></div></div>';
         updateCountIndicator(0);
+        clearSearchHighlights();
+        searchInput.value = '';
     });
 
     createButton.addEventListener('click', function() {
@@ -237,8 +369,46 @@ document.addEventListener('DOMContentLoaded', function() {
         const result = processOutput(selectedOption, allPaths);
         const count = countResultLines(result);
 
-        outputContent.innerHTML = `<textarea class="text-input" readonly>${result}</textarea>`;
+        const wrapper = outputContent.querySelector('.textarea-wrapper');
+        if (wrapper) {
+            const existingTextarea = wrapper.querySelector('.text-input');
+            const existingHighlighted = wrapper.querySelector('.highlighted-content');
+            if (existingTextarea) existingTextarea.remove();
+            if (existingHighlighted) existingHighlighted.remove();
+            
+            const textarea = document.createElement('textarea');
+            textarea.className = 'text-input';
+            textarea.readOnly = true;
+            textarea.value = result;
+            wrapper.appendChild(textarea);
+        }
+        
         updateCountIndicator(count);
         switchTab('output');
+    });
+
+    searchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const searchTerm = this.value.trim();
+            
+            if (searchTerm) {
+                performSearch(searchTerm);
+            }
+        }
+    });
+
+    searchInput.addEventListener('input', function() {
+        if (this.value.trim() === '') {
+            clearSearchHighlights();
+        } else {
+            currentMatchIndex = -1;
+        }
+    });
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            clearSearchHighlights();
+        });
     });
 });

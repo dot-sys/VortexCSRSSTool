@@ -56,13 +56,24 @@
                     <div class="tab" data-tab="output">Output</div>
                 </div>
                 <div class="tab-content active" id="csrss1">
-                    <textarea class="text-input" id="input-csrss1" placeholder="Enter CSRSS string data here..."></textarea>
+                    <div class="textarea-wrapper">
+                        <div class="highlight-overlay" id="highlight-csrss1"></div>
+                        <textarea class="text-input" id="input-csrss1" placeholder="Enter CSRSS string data here..."></textarea>
+                    </div>
                 </div>
                 <div class="tab-content" id="csrss2">
-                    <textarea class="text-input" id="input-csrss2" placeholder="Enter CSRSS string data here..."></textarea>
+                    <div class="textarea-wrapper">
+                        <div class="highlight-overlay" id="highlight-csrss2"></div>
+                        <textarea class="text-input" id="input-csrss2" placeholder="Enter CSRSS string data here..."></textarea>
+                    </div>
                 </div>
-                <div class="tab-content" id="output"></div>
+                <div class="tab-content" id="output">
+                    <div class="textarea-wrapper">
+                        <div class="highlight-overlay" id="highlight-output"></div>
+                    </div>
+                </div>
                 <div class="bottom-controls">
+                    <input type="text" class="search-input" id="search-input" placeholder="Search">
                     <button class="create-button" id="create-button">Create output</button>
                     <select class="output-select" id="output-select">
                         <option value="" disabled selected>Choose Output Option</option>
