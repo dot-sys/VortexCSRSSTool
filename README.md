@@ -19,11 +19,17 @@ All data is processed locally in your browser. **No information is stored or tra
 ---
 
 ### Usage
-1. Extract Raw String Data from Systeminformer (explained below if needed).
+1. Extract Raw String Data from Systeminformer (explained below).
 2. Paste your **raw CSRSS string results** into the input field.  
 3. Click **Create**.  
-4. View the parsed and filtered output immediately.
+4. Review the parsed and filtered output.
 
+Filter Options:
+- Filter and Sort (.exe / .dll): Extracted strings are filtered out of raw data (entries that end with .exe or .dll)
+- Modified Extensions: Filters out Extensions that do not end in typical extensions found in CSRSS
+- Find Associates: Shows executed files in csrss data which are from the same Folder and could be executed by the same Program.
+
+*All Data is sorted from A-Z.*
 
 ---
 
