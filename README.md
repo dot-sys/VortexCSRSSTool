@@ -6,7 +6,8 @@
 
 <p align="center">
   Extract and visualize Windows path strings from CSRSS raw data - fast, private and browser-based. <br>
-  Use here: https://dot-sys.github.io/VortexCSRSSTool/
+  Use here: https://dot-sys.github.io/VortexCSRSSTool/ <br><br>
+  ⭐ Star this project if you found it useful.
 </p>
 
 ---
@@ -36,7 +37,7 @@ In this specific case we will make use of its **canary version**, as it usually 
 3) Restart the program and make sure we have Administrator-Mode activated by clicking the <img src="https://dot-sys.github.io/VortexCSRSSTool/Assets/Admin.png" alt="Admin Button"> Admin-Icon.
 4) On the Top Right side search for "CSRSS" and choose the first Process in the List.
 5) Doubleclick > Go to the Memories-Tab > Options > Strings
-6) Here, choose Minimum Length 5 and Enable "Detect Unicode", "Extended Unicode", "Private" and "Mapped" Options:
+6) Choose Minimum Length 5 and Enable "Detect Unicode", "Extended Unicode", "Private" and "Mapped" Options:
 <img src="https://dot-sys.github.io/VortexCSRSSTool/Assets/StringSearch.png" alt="String Search">
 
 7) On the Bottom right side click on "Copy"
@@ -49,9 +50,3 @@ In this specific case we will make use of its **canary version**, as it usually 
 
 ### Credits
 - **[Eric Zimmerman’s Bstrings tool](https://github.com/EricZimmerman/bstrings)** - for the original WinPath regex  
-
----
-
-<p align="center">
-  ⭐ Star this project on GitHub if you found it useful.
-</p>
