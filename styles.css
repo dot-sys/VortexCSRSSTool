@@ -1,0 +1,240 @@
+/*
+ * MIT License
+ * 
+ * Copyright (c) 2025 dot-sys (https://github.com/dot-sys)
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * Comment created by github-copilot. Nobody reads header-comments anyways.
+ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Fira Code', monospace;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#vanta-bg {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#vanta-bg > div {
+    text-align: center;
+    color: white;
+    width: 100%;
+    max-width: none;
+}
+
+h2 {
+    margin-bottom: 10px;
+}
+
+h3 {
+    margin-bottom: 15px;
+}
+
+.content-box {
+    width: 80vw;
+    height: 70vh;
+    background: black;
+    margin: 0 auto 15px auto;
+    border: 1px solid white;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.tabs {
+    display: flex;
+    background: transparent;
+    justify-content: center;
+    opacity: 1 !important;
+}
+
+.tab {
+    padding: 8px 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid white;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    cursor: pointer;
+    color: white;
+    margin-right: 5px;
+    transition: background 0.3s;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 1 !important;
+    text-decoration: none;
+}
+
+.tab:hover {
+    background: #171717 !important;
+}
+
+.tab.active {
+    background: #333333 !important;
+    text-decoration: underline;
+}
+
+.indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: transparent;
+    margin-left: auto;
+    transition: background 0.3s;
+    flex-shrink: 0;
+}
+
+.indicator.active {
+    background: #00b300;
+    box-shadow: 0 0 5px #00b300;
+}
+
+.tab-content {
+    padding: 20px;
+    flex: 1;
+    overflow: auto;
+    display: none;
+    color: white;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.text-input {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    color: white;
+    font-family: 'Fira Code', monospace;
+    font-size: 14px;
+    padding: 10px;
+    resize: none;
+    outline: none;
+}
+
+.text-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.text-input:focus {
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+.bottom-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.3);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    opacity: 1 !important;
+    position: relative;
+}
+
+.count-indicator {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    color: rgba(255, 255, 255, 0.7);
+    font-family: 'Fira Code', monospace;
+    font-size: 12px;
+    display: none;
+}
+
+.create-button,
+.reset-button {
+    padding: 10px 30px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid white;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    font-family: 'Fira Code', monospace;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.create-button:hover,
+.reset-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.output-select {
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid white;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    font-family: 'Fira Code', monospace;
+    font-size: 14px;
+}
+
+.output-select option {
+    background: black;
+    color: white;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    cursor: pointer;
+    font-family: 'Fira Code', monospace;
+    font-size: 14px;
+    user-select: none;
+}
+
+.ignore-checkbox {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: white;
+}
+
+a {
+    color: #4da6ff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
